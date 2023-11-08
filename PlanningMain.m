@@ -12,6 +12,7 @@ clearvars;
 temp = dir('data/csv/*.csv'); % check how many csv files in the datafolder
 sessID = size(temp,1) + 1; % assign session ID 
 
+rpsID = input("Enter the RPS ID:");
 
 
 testTrials = 0;  % put number of trials > 0 to run for only that number of trials
@@ -587,6 +588,26 @@ for game = 1:Nrounds
         disp(['Your hand is ' num2str(handNames)]);
         disp(['Choose: ' num2str(cardDrawNames)]);
 
+        data.card1(trial) = displayTriggers(1);
+        data.card2(trial) = displayTriggers(2);
+        data.card3(trial) = displayTriggers(3);
+        data.card4(trial) = displayTriggers(4);
+        data.card5(trial) = displayTriggers(5);
+        data.card6(trial) = displayTriggers(6);
+        data.card7(trial) = displayTriggers(7);
+        data.card8(trial) = displayTriggers(8);
+        data.card9(trial) = displayTriggers(9);
+        data.card11(trial) = displayTriggers(11);
+        data.card12(trial) = displayTriggers(12);
+        data.card13(trial) = displayTriggers(13);
+        data.card14(trial) = displayTriggers(14);
+        data.card15(trial) = displayTriggers(15);
+        data.card16(trial) = displayTriggers(16);
+        data.card17(trial) = displayTriggers(17);
+        data.card18(trial) = displayTriggers(18);
+        data.card19(trial) = displayTriggers(19);
+        data.card20(trial) = displayTriggers(20);
+
         % Wait for a response
         response = 0;
         timer = 0;
@@ -727,7 +748,7 @@ if eyeTracking
     Eyelink('shutdown');
 end
 
-writetable(data,['data/csv/data_' int2str(sessID) '.csv']);
+
 
 % Final screen
 Screen('FillRect', wPtr, black);
@@ -741,10 +762,26 @@ DrawFormattedText(wPtr,['This is the end of the experiment.' '\n\n' ...
     'Your total points are ' num2str(totalPoints) '.' '\n\n' ...
     'Your best number of sets is ' num2str(bestCombo) '.' '\n\n' ...
     'Your bonus for this is ' num2str(totalBonus) '.' '\n\n' ...
-    'Your total points are ' num2str(totalBonus + totalPoints) '.' '\n\n' ...
+    'Your total score are ' num2str(totalBonus + totalPoints) '.' '\n\n' ...
+    '\n\n''\n\n' 'BEST SCORES:' '\n\n' ...
+    'Arkady    989' '\n\n' ...
+    'Momina    900' '\n\n' ...
+    'Dennis    900' '\n\n' ...
+    'Ashley    900' '\n\n' ...
+    'Roxanne   900' '\n\n' ...
+    'Daniil    900' '\n\n' ...
     ], ...
        'center','center');
 
+data.totalPoints = totalPoints*ones(size(data,1),1);
+data.bestCombo = bestCombo*ones(size(data,1),1);
+data.totalBonus = totalBonus*ones(size(data,1),1);
+data.totalScore = totalBonus*ones(size(data,1),1) + totalPoints*ones(size(data,1),1);
+
+data.rpsID = rpsID*ones(size(data,1),1);
+
+save(['data/mat/data_' int2str(sessID) '.mat']);
+writetable(data,['data/csv/data_' int2str(sessID) '.csv']);
 
 Screen('Flip',wPtr);
 WaitSecs(15);
@@ -752,3 +789,5 @@ WaitSecs(15);
 
 
 Screen('CloseAll');
+
+
