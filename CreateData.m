@@ -1,10 +1,10 @@
-function data = CreateData(sessID, Ntrials, Nrounds)
+function data = CreateData(rpsID, Ntrials, Nrounds)
 % THIS FUNCTION CREATES THE DATA FRAME WITH RANDOM ORDER OF CONDITIONS AND
 % TRIALS
 
 
 % Converting into a dataframe
-data = array2table(sessID.*ones(Ntrials*Nrounds,1),'VariableNames',{'id'});
+data = array2table(rpsID.*ones(Ntrials*Nrounds,1),'VariableNames',{'id'});
 
 % Adding variables
 data.uniqueID = round(rand*100000000)*ones(size(data,1),1);

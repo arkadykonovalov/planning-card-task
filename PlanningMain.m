@@ -118,7 +118,7 @@ totalCombosSuits = 0;
 totalCombosDigits = 0;
 
 % create data
-data = CreateData(sessID, Ntrials, Nrounds);
+data = CreateData(rpsID, Ntrials, Nrounds);
 
 trial = 1;
 
@@ -737,7 +737,7 @@ for game = 1:Nrounds
     Screen('Flip',wPtr);
 
     % Save data
-    save(['data/mat/data_' int2str(sessID) '.mat']);
+    save(['data/mat/data_' int2str(rpsID) '.mat']);
 
     WaitSecs(timeFeedback);
     MbWait(wPtr);
@@ -780,8 +780,8 @@ data.totalScore = totalBonus*ones(size(data,1),1) + totalPoints*ones(size(data,1
 
 data.rpsID = rpsID*ones(size(data,1),1);
 
-save(['data/mat/data_' int2str(sessID) '.mat']);
-writetable(data,['data/csv/data_' int2str(sessID) '.csv']);
+save(['data/mat/data_' int2str(rpsID) '.mat']);
+writetable(data,['data/csv/data_' int2str(rpsID) '.csv']);
 
 Screen('Flip',wPtr);
 WaitSecs(15);
