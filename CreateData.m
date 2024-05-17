@@ -24,6 +24,7 @@ data.card6 = -999*ones(size(data,1),1);
 data.card7 = -999*ones(size(data,1),1);
 data.card8 = -999*ones(size(data,1),1);
 data.card9 = -999*ones(size(data,1),1);
+data.card10 = -999*ones(size(data,1),1);
 data.card11 = -999*ones(size(data,1),1);
 data.card12 = -999*ones(size(data,1),1);
 data.card13 = -999*ones(size(data,1),1);

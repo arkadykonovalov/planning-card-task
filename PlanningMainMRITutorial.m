@@ -1,7 +1,7 @@
 
 % SCRIPT TO RUN PLANNING EXPERIMENT
 % by Arkady Konovalov (arkady.konovalov@gmail.com)
-% Version Sep 19 2023
+% Version May 16 2023
 
 % Clear the workspace and the screen
 sca;
@@ -12,7 +12,7 @@ clearvars;
 temp = dir('data/csv/*.csv'); % check how many csv files in the datafolder
 sessID = size(temp,1) + 1; % assign session ID 
 
-rpsID = input("Enter the RPS ID:");
+rpsID = input("Enter the subject ID:");
 
 
 testTrials = 0;  % put number of trials > 0 to run for only that number of trials
@@ -26,10 +26,10 @@ eyeTracking = false; % set to true if want eye-tracking
 convertionRate = 500; % in points
 showupFee = 7; % in pounds
 
-suitsBonus = 20;
-digitsBonus = 20;
+suitsBonus = 40;
+digitsBonus = 40;
 
-totalBonusRate = 5;
+totalBonusRate = 20;
 
 
 maxRT = 10;  % maximal response time
@@ -52,11 +52,17 @@ deckNames = {'a2', 'a3', 'a4', 'a5','a6', ...
 images = {};
 for i = 1:size(deckNames,2)
     cardName = deckNames{i};
-    images{i} = imread(['png/' cardName '.png']);
+    images{i} = imread(['png_mri/' cardName '.png']);
+end
+
+imagesBig = {};
+for i = 1:size(deckNames,2)
+    cardName = deckNames{i};
+    imagesBig{i} = imread(['png/' cardName '.png']);
 end
 
 Ntrials = 10;
-Nrounds = 10;
+Nrounds = 1;
 
 % Set up Psychtoolbox
 PsychDefaultSetup(2);
@@ -76,37 +82,45 @@ leftKey = KbName('LeftArrow');
 rightKey = KbName('RightArrow');
 
 % Create a row of areas to display cards
-res = [69*1.5 105*1.5];
+res = [105*0.5 69*0.5];
 
-rectA2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.35*rect(3), rect(4)/10);
-rectB2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.45*rect(3), rect(4)/10);
-rectC2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.55*rect(3), rect(4)/10);
-rectD2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.65*rect(3), rect(4)/10);
+rectA2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.41*rect(3), 0.7*rect(4));
+rectB2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.47*rect(3), 0.7*rect(4));
+rectC2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.53*rect(3), 0.7*rect(4));
+rectD2 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.59*rect(3), 0.7*rect(4));
 
-rectA3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.35*rect(3), 3*rect(4)/10);
-rectB3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.45*rect(3), 3*rect(4)/10);
-rectC3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.55*rect(3), 3*rect(4)/10);
-rectD3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.65*rect(3), 3*rect(4)/10);
+rectA3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.41*rect(3), 0.75*rect(4));
+rectB3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.47*rect(3), 0.75*rect(4));
+rectC3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.53*rect(3), 0.75*rect(4));
+rectD3 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.59*rect(3), 0.75*rect(4));
 
-rectA4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.35*rect(3), rect(4)/2);
-rectB4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.45*rect(3), rect(4)/2);
-rectC4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.55*rect(3), rect(4)/2);
-rectD4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.65*rect(3), rect(4)/2);
+rectA4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.41*rect(3), 0.8*rect(4));
+rectB4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.47*rect(3), 0.8*rect(4));
+rectC4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.53*rect(3), 0.8*rect(4));
+rectD4 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.59*rect(3), 0.8*rect(4));
 
-rectA5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.35*rect(3), 7*rect(4)/10);
-rectB5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.45*rect(3), 7*rect(4)/10);
-rectC5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.55*rect(3), 7*rect(4)/10);
-rectD5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.65*rect(3), 7*rect(4)/10);
+rectA5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.41*rect(3), 0.85*rect(4));
+rectB5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.47*rect(3), 0.85*rect(4));
+rectC5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.53*rect(3), 0.85*rect(4));
+rectD5 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.59*rect(3), 0.85*rect(4));
 
-rectA6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.35*rect(3), 9*rect(4)/10);
-rectB6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.45*rect(3), 9*rect(4)/10);
-rectC6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.55*rect(3), 9*rect(4)/10);
-rectD6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.65*rect(3), 9*rect(4)/10);
+rectA6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.41*rect(3), 0.9*rect(4));
+rectB6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.47*rect(3), 0.9*rect(4));
+rectC6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.53*rect(3), 0.9*rect(4));
+rectD6 = CenterRectOnPoint([0, 0, res(1), res(2)], 0.59*rect(3), 0.9*rect(4));
 
 positions = {rectA2, rectA3, rectA4, rectA5, rectA6,...
              rectB2, rectB3, rectB4, rectB5, rectB6,...
              rectC2, rectC3, rectC4, rectC5, rectC6,...
              rectD2, rectD3, rectD4, rectD5, rectD6};
+
+% main two cards
+res_card = [2*69 2*105];
+
+rect_left = CenterRectOnPoint([0, 0, res_card(1), res_card(2)], 0.4*rect(3), 0.4*rect(4));
+rect_right = CenterRectOnPoint([0, 0, res_card(1), res_card(2)], 0.6*rect(3), 0.4*rect(4));
+
+positionsMain = {rect_left, rect_right};
 
 % Set up the frame size and color
 frameSize = 5;  % in pixels
@@ -149,14 +163,13 @@ Screen('FillRect', wPtr, black);
 DrawFormattedText(wPtr,['Welcome to the experiment.' '\n\n' ...
         '\n\n' 'Today you will play a simple card game.' ...
         '\n\n' 'Your goal is to get as many points as possible.'  ...
-        '\n\n' 'In the end, we will show you how well you did'  ...
-        '\n\n' 'compared to the other participants.' '\n\n' ...
-        '\n\n' 'Click mouse anywhere to continue.' ], ...
+        '\n\n' 'In the end, we will convert the points into GBP.'  ...
+        '\n\n' '\n\n' 'Press any key to continue.' ], ...
         0.1*rect(3),'center');
 Screen('Flip',wPtr);
 
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 2
 
@@ -168,31 +181,21 @@ DrawFormattedText(wPtr,['Read the instructions carefully.' '\n\n' ...
 Screen('Flip',wPtr);
 
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
+
 
 % SCREEN 3
 
 Screen('FillRect', wPtr, black);
 
-DrawFormattedText(wPtr,['You will play the game 10 times.' '\n\n' ...
-        '\n\n' 'Each time, you will start with 20 cards.'], ...
+DrawFormattedText(wPtr,['In this tutorial, you will play the game a few times.' '\n\n' ...
+        '\n\n' 'In each game, you will start with 20 cards.'], ...
         0.1*rect(3),'center');
 Screen('Flip',wPtr);
 
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
-% SCREEN 4
-
-Screen('FillRect', wPtr, black);
-
-DrawFormattedText(wPtr,['You will play the game 10 times.' '\n\n' ...
-        '\n\n' 'Each time, you will start with 20 cards.'], ...
-        0.1*rect(3),'center');
-Screen('Flip',wPtr);
-
-WaitSecs(tutorialDelay);
-MbWait(wPtr);
 
 % SCREEN 5
 
@@ -211,13 +214,14 @@ Screen('FillRect', wPtr, black);
 
 DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
 DrawFormattedText(wPtr,['There are 4 suits of cards (denoted by symbols).' '\n\n' ...
-        '\n\n' 'There are numbers on each card: from 2 to 6.' ...
-        '\n\n' 'In total, 20 cards.'], ...
+        '\n\n' 'Each card is numbered from 2 to 6.' ...
+        '\n\n' 'In total, there are 20 cards.' ...
+        '\n\n' 'You will see a reminder about the deck at the bottom of the screen.'], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 6
 
@@ -227,16 +231,19 @@ displayTriggers = [1 1 2 1 1 ...
     1 1 1 1 1];
 index1 = 3;
 index2 = 14;
+indices = [index1 index2];
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 DrawFormattedText(wPtr,['In each round, computer will randomly select 2 cards.' '\n\n' ...
-        '\n\n' 'They will light up like this.' ...
-        '\n\n' 'You will need to choose one of the cards.'...
-        '\n\n' 'Click on one of them now.' ], ...
+        '\n\n' '\n\n' 'They will light up like this and also will be shown in the middle of the screen.' ...
+        '\n\n' 'You will need to choose one of the cards by pressing Left or Right Arrow keys.'...
+        '\n\n' 'Try pressing left or right now.' ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
+
+WaitSecs(1);
 
 %Wait for a response
 
@@ -245,27 +252,12 @@ response = 0;
 timer = 0;
 while ~response % && timer < maxRT
     [keyIsDown, secs, keyCode] = KbCheck;
-    timer = GetSecs -  data.onset(trial) - t0;
-    [x,y,buttons] = GetMouse(wPtr);
+    timer = GetSecs -  t0;
 
-    ROI1 = positions{index1};
-    ROI2 = positions{index2};
 
-    if any(buttons) && ((x > ROI1(1) && x < ROI1(3)) || (x > ROI2(1) && x < ROI2(3))) && ((y > ROI1(2) && y < ROI1(4)) || (y > ROI2(2) && y < ROI2(4)))
+    if keyIsDown
 
-        % record response time
-        data.rt(trial) = GetSecs - data.onset(trial) - t0;
-        data.response(trial) = GetSecs - t0;
-
-        finalx = x;
-        finaly = y;
-
-        if eyeTracking
-            evt = Eyelink('newestfloatsample');
-            data.response_et(trial) = evt.time - et0;
-        end
-
-        if (finalx > ROI1(1) && finalx < ROI1(3)) && (finaly > ROI1(2) && finaly < ROI1(4))
+        if keyCode(leftKey)
             response = 1;
 
             displayTriggers(index1) = 3;
@@ -273,9 +265,9 @@ while ~response % && timer < maxRT
 
             frameRect = positions{index1} + [-frameSize, -frameSize, frameSize, frameSize];
 
-        elseif (finalx > ROI2(1) && finalx < ROI2(3)) && (finaly > ROI2(2) && finaly < ROI2(4))
+        elseif keyCode(rightKey)
             response = 2;
-            
+
             displayTriggers(index2) = 3;
             displayTriggers(index1) = 0;
 
@@ -285,16 +277,16 @@ while ~response % && timer < maxRT
 end
 
 %Draw a choice frame
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 
 DrawFormattedText(wPtr,['You will keep the chosen card.' '\n\n' ...
-        '\n\n' 'It will be highlighted in green.' ...
+        '\n\n' 'It will be highlighted in green below.' ...
         '\n\n' 'The other card will disappear for this game.'...
         '\n\n' 'The computer will then select 2 new cards.' ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 if response == 1
     displayTriggers(index1) = 4;
@@ -308,104 +300,104 @@ displayTriggers(5) = 2;
 displayTriggers(11) = 2;
 index1 = 5;
 index2 = 11;
+indices = [index1 index2];
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
-DrawFormattedText(wPtr,['Like this.' '\n\n' ...
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawFormattedText(wPtr,['For instance, like this.' '\n\n' ...
         '\n\n' 'It will never return to cards' ...
-        '\n\n' 'that were previously chosen.'...
-        '\n\n' 'Click anywhere to continue.' ], ...
+        '\n\n' 'that were previously chosen, since they disappear.'...
+        '\n\n' 'Press any key to continue.' ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 
 % SCREEN 7
 
-displayTriggers([1 6 7 8 12 13 16 18 19]) = 0;
-displayTriggers([4 2 5 9 10 11 15 17 20]) = 4;
+displayTriggers([6 2 7 8 12 13 14 16 18 19]) = 0;
+displayTriggers([1 3 4 5 9 10 15 11 17 20]) = 4;
 
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 DrawFormattedText(wPtr,['You will keep chosing until'  ...
         '\n\n' 'there are only 10 cards left.' ...
         '\n\n' 'Then the game will calculate your points.' '\n\n' ...
-        '\n\n' 'Click anywhere to continue.' ], ...
+        '\n\n' 'Pressy any key to continue.' ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 8
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 DrawFormattedText(wPtr,['For instance, let''s say you have these cards in the end.'  ...
         '\n\n' 'First, you will receive a sum of points' ...
         '\n\n' 'for all numbers on the cards that you have.' '\n\n' ...
-        '\n\n' 'Here, you will get 46 points.' ], ...
+        '\n\n' 'Here, you will get 45 points.' ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 9
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
-DrawFormattedText(wPtr,['Additionally, you will get 20 bonus points for'  ...
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawFormattedText(wPtr,['Additionally, you will get 40 bonus points for'  ...
         '\n\n' 'each set of 4 cards of the same suit (symbol)' ...
         '\n\n' 'and each set of 4 cards with the same number.' '\n\n' ...
-        '\n\n' 'Here, you have one set of clubs (crosses)' ...
-        '\n\n' 'and one set of 6s (the very bottom row).' ...
-        ...
+        '\n\n' 'Here, one set of sixes (the very bottom row)' ...
+        '\n\n' 'and one set of clubs (crosses).' ...
         ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 10
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
-DrawFormattedText(wPtr,['Each of these sets gives you 20 bonus points.'  ...
-        '\n\n' 'So you would get 46 points from the cards' ...
-        '\n\n' 'and 40 points for having 2 sets.' '\n\n' ...
-        '\n\n' 'In total, in this game you would get 86 points. ' ...
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawFormattedText(wPtr,['Each set gives you 40 bonus points.'  ...
+        '\n\n' 'So you would get 45 points from the cards' ...
+        '\n\n' 'and 80 points for having 2 sets.' '\n\n' ...
+        '\n\n' 'In total, in this game you would get 125 points. ' ...
         ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 10
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 DrawFormattedText(wPtr,['Importantly, the set of the same suit'  ...
-        '\n\n' 'can be any numbers, not in a row!' ...
+        '\n\n' 'can be any numbers, they do not have to be in a row!' ...
         '\n\n' 'So you can have, for instance, 2, 4, 5, 6' ...
         '\n\n' 'of clubs to get the bonus. ' ...
         ], ...
         0.05*rect(3),'center');
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 10
 
 Screen('FillRect', wPtr, black);
 
-DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 DrawFormattedText(wPtr,['After the game, you will see a summary'  ...
         '\n\n' 'as you can see on the right.' '\n\n' ...
         '\n\n' 'Notice you will also see a total count of sets.'  ...
@@ -414,11 +406,11 @@ DrawFormattedText(wPtr,['After the game, you will see a summary'  ...
         ], ...
         0.05*rect(3),'center');
 
- DrawFormattedText(wPtr,['THIS ROUND' '\n\n' 'Sum of points: ' num2str(46) ...
+ DrawFormattedText(wPtr,['THIS ROUND' '\n\n' 'Sum of points: ' num2str(45) ...
         '\n\n' 'Number of suits sets: ' num2str(1) ...
         '\n\n' 'Number of digits sets: ' num2str(1) ...
-        '\n\n' 'Total points: ' num2str(86) ...
-        '\n\n' 'Click anywhere to continue.'], ...
+        '\n\n' 'Total points: ' num2str(125) ...
+        '\n\n' 'Press any key to continue.'], ...
         0.75*rect(3),'center');
 
     DrawFormattedText(wPtr,['OVERALL' ...
@@ -428,25 +420,25 @@ DrawFormattedText(wPtr,['After the game, you will see a summary'  ...
 
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 11
 
 Screen('FillRect', wPtr, black);
 
-DrawFormattedText(wPtr,['You will play 10 games.'  ...
-        '\n\n' 'For instance, after 10 games you have'  ...
+DrawFormattedText(wPtr,['In the scanner, you will play multiple games.'  ...
+        '\n\n' 'For instance, after all games you have'  ...
         '\n\n' 'collected 10 sets of suits and 3 sets'  ...
         '\n\n' 'of numbers as shown on the right. ' '\n\n' ...
         '\n\n' 'The computer will choose the largest number (10>3) ' ...
-        '\n\n' 'and multiply it by 5 for your final bonus. ' ...
+        '\n\n' 'and multiply it by 20 for your final bonus. ' ...
         ], ...
         0.05*rect(3),'center');
 
  DrawFormattedText(wPtr,['THIS ROUND' '\n\n' 'Sum of points: ' num2str(55) ...
         '\n\n' 'Number of suits sets: ' num2str(2) ...
         '\n\n' 'Number of digits sets: ' num2str(0) ...
-        '\n\n' 'Total points: ' num2str(95) ...
+        '\n\n' 'Total points: ' num2str(135) ...
         '\n\n' 'Click anywhere to continue.'], ...
         0.75*rect(3),'center');
 
@@ -457,25 +449,25 @@ DrawFormattedText(wPtr,['You will play 10 games.'  ...
 
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 12
 
 Screen('FillRect', wPtr, black);
 
 DrawFormattedText(wPtr,['In this case, you will get'  ...
-        '\n\n' '10 x 5 = 50 final bonus points'  ...
+        '\n\n' '10 x 20 = 200 final bonus points'  ...
         '\n\n' 'in addition to the points you got in'  ...
         '\n\n' 'each single game. ' '\n\n' ...
-        '\n\n' 'So your points will come from cards, from sets,  ' ...
-        '\n\n' 'and from collections of sets.' ...
+        '\n\n' 'So your points will come from cards and sets in each game,  ' ...
+        '\n\n' 'and from collections of sets across games.' ...
         ], ...
         0.05*rect(3),'center');
 
  DrawFormattedText(wPtr,['THIS ROUND' '\n\n' 'Sum of points: ' num2str(55) ...
         '\n\n' 'Number of suits sets: ' num2str(2) ...
         '\n\n' 'Number of digits sets: ' num2str(0) ...
-        '\n\n' 'Total points: ' num2str(95) ...
+        '\n\n' 'Total points: ' num2str(135) ...
         '\n\n' 'Click anywhere to continue.'], ...
         0.75*rect(3),'center');
 
@@ -486,7 +478,7 @@ DrawFormattedText(wPtr,['In this case, you will get'  ...
 
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 
 % SCREEN 13
@@ -494,31 +486,30 @@ MbWait(wPtr);
 Screen('FillRect', wPtr, black);
 
 DrawFormattedText(wPtr,['The absolute maximum of points you can get'  ...
-        '\n\n' 'in a single game is 111 points.'  ...
-        '\n\n' 'Over 10 games it is 1110 points.' '\n\n' ...
+        '\n\n' 'in a single game is 171 points.'  ...
+        '\n\n' 'Over 10 games this could be 1710 points.' '\n\n' ...
         '\n\n' 'If you collect only sets of one type '  ...
         '\n\n' 'you can get up to 20 sets and a final bonus' ...
-        '\n\n' 'of 100 points, for a 1210 total maximum.' ...
+        '\n\n' 'of 400 points, for a 2110 total maximum.' ...
         ], ...
         'center','center');
 
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 % SCREEN 13
 
 Screen('FillRect', wPtr, black);
 
-DrawFormattedText(wPtr,['Try your best!'  ...
-        '\n\n' 'In the end, we will show you how you did'  ...
-        '\n\n' 'in comparison to other participants.' '\n\n' ...
+DrawFormattedText(wPtr,['Now try and play one practice game.'  ...
+        '\n\n' 'Press any key to start.'  ...
         ], ...
         'center','center');
 
 Screen('Flip', wPtr);
 WaitSecs(tutorialDelay);
-MbWait(wPtr);
+KbWait;
 
 
 Screen('Close');
@@ -549,7 +540,7 @@ for game = 1:Nrounds
         data.block(trial) = game;
         data.btrial(trial) = strial;
 
-        DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+        DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, [0 0], wPtr, frameSize, frameColorChoice, frameColorChosen);
         Screen('Flip', wPtr);
         WaitSecs(timeITI);
 
@@ -565,11 +556,12 @@ for game = 1:Nrounds
 
         index1 = initialDeck == cardDraw(1);
         index2 = initialDeck == cardDraw(2);
+        indices = [find(index1==1) find(index2==1)];
 
         displayTriggers(index1) = 2;
         displayTriggers(index2) = 2;
 
-        DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+       DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
         Screen('Flip', wPtr);
 
         % record stimuli onset time
@@ -615,26 +607,20 @@ for game = 1:Nrounds
         while ~response % && timer < maxRT
             [keyIsDown, secs, keyCode] = KbCheck;
             timer = GetSecs -  data.onset(trial) - t0;
-            [x,y,buttons] = GetMouse(wPtr);
-
-            ROI1 = positions{index1};
-            ROI2 = positions{index2};
-
-            if any(buttons) && ((x > ROI1(1) && x < ROI1(3)) || (x > ROI2(1) && x < ROI2(3))) && ((y > ROI1(2) && y < ROI1(4)) || (y > ROI2(2) && y < ROI2(4)))
+           
+            if keyIsDown 
 
                 % record response time
                 data.rt(trial) = GetSecs - data.onset(trial) - t0;
                 data.response(trial) = GetSecs - t0;
 
-                finalx = x;
-                finaly = y;
-
+       
                 if eyeTracking
                     evt = Eyelink('newestfloatsample');
                     data.response_et(trial) = evt.time - et0;
                 end
 
-                if (finalx > ROI1(1) && finalx < ROI1(3)) && (finaly > ROI1(2) && finaly < ROI1(4))
+                if keyCode(leftKey)
                     response = 1;
                     data.choice(trial) = 1;
                     data.payoff(trial) = rem(cardDraw(1),100);
@@ -647,7 +633,7 @@ for game = 1:Nrounds
 
                     frameRect = positions{index1} + [-frameSize, -frameSize, frameSize, frameSize];
 
-                elseif (finalx > ROI2(1) && finalx < ROI2(3)) && (finaly > ROI2(2) && finaly < ROI2(4))
+                elseif keyCode(rightKey)
                     response = 2;
                     data.choice(trial) = 2;
                     data.payoff(trial) = rem(cardDraw(2),100);
@@ -672,7 +658,7 @@ for game = 1:Nrounds
         end
 
         % Draw a choice frame
-        DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+        DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
         Screen('Flip', wPtr);
         WaitSecs(1);
 
@@ -715,7 +701,7 @@ for game = 1:Nrounds
     % Points display
     Screen('FillRect', wPtr, black);
 
-    DrawStimuli(images, positions, displayTriggers, wPtr, frameSize, frameColorChoice, frameColorChosen);
+    DrawStimuliMRI(images, imagesBig, positions, positionsMain, displayTriggers, indices, wPtr, frameSize, frameColorChoice, frameColorChosen);
 
     Screen('TextColor', wPtr, white);
     Screen('TextSize', wPtr, 20);
@@ -727,7 +713,7 @@ for game = 1:Nrounds
         '\n\n' 'Number of suits sets: ' num2str(nCombosSuits) ...
         '\n\n' 'Number of digits sets: ' num2str(nCombosDigits) ...
         '\n\n' 'Total points: ' num2str(totalPoints) ...
-        '\n\n' 'Click anywhere to continue.'], ...
+        '\n\n' 'Press any key to continue.'], ...
         0.75*rect(3),'center');
 
     DrawFormattedText(wPtr,['OVERALL' ...
@@ -741,7 +727,7 @@ for game = 1:Nrounds
     save(['data/mat/data_' int2str(rpsID) '.mat']);
 
     WaitSecs(timeFeedback);
-    MbWait(wPtr);
+    KbWait;
 
 end
 
@@ -759,19 +745,9 @@ bestCombo = max(totalCombosSuits,totalCombosDigits);
 totalBonus = bestCombo*totalBonusRate;
 
 payment = round(sum(data.payoff)/convertionRate);
-DrawFormattedText(wPtr,['This is the end of the experiment.' '\n\n' ...
-    'Your total points are ' num2str(totalPoints) '.' '\n\n' ...
-    'Your best number of sets is ' num2str(bestCombo) '.' '\n\n' ...
-    'Your bonus for this is ' num2str(totalBonus) '.' '\n\n' ...
-    'Your total score are ' num2str(totalBonus + totalPoints) '.' '\n\n' ...
-    '\n\n''\n\n' 'BEST SCORES:' '\n\n' ...
-    'Arkady    989' '\n\n' ...
-    'Daniil    959' '\n\n' ...
-    'Roxanne   933' '\n\n' ...
-    'Dennis    915' '\n\n' ...
-    'Momina    900' '\n\n' ...
-    'Ashley    900' '\n\n' ...
-    ], ...
+DrawFormattedText(wPtr,['This is the end of the tutorial.' '\n\n' ...
+    'Please tell the experimenter that you have finished.' '\n\n' ...
+       ], ...
        'center','center');
 
 data.totalPoints = totalPoints*ones(size(data,1),1);
@@ -785,9 +761,8 @@ save(['data/mat/data_' int2str(rpsID) '.mat']);
 writetable(data,['data/csv/data_' int2str(rpsID) '.csv']);
 
 Screen('Flip',wPtr);
-WaitSecs(15);
-%MbWait;
-
+WaitSecs(5);
+KbWait;
 
 Screen('CloseAll');
 
