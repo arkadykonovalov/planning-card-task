@@ -16,8 +16,14 @@ Nrounds = 30;
 Nruns = 3;
 
 load("ITI.mat");
-temp = Shuffle(ITI(:));
-ITI = reshape(temp,size(ITI));
+temp1 = Shuffle(ITI(:));
+ITI1 = reshape(temp1,size(ITI));
+temp2 = Shuffle(ITI(:));
+ITI2 = reshape(temp2,size(ITI));
+temp3 = Shuffle(ITI(:));
+ITI3 = reshape(temp3,size(ITI));
+
+ITI = [ITI1 ITI2 ITI3];
 
 
 % EXPERIMENT PARAMETERS
