@@ -153,7 +153,7 @@ end
 % MAIN EXPERIMENT LOOP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- %record run starting time
+
 
 
  for game = 1:Nrounds
@@ -164,8 +164,9 @@ end
 
          Screen('TextColor', wPtr, white);
          Screen('TextSize', wPtr, 40);
-         DrawFormattedText(wPtr,['NEW RUN STARTING IN 5 SECONDS...'], ...
+         DrawFormattedText(wPtr,['NEW RUN STARTING SOON...'], ...
              'center','center');
+         Screen('Flip', wPtr);
 
          while 1
              [keyIsDown, secs, keyCode] = KbCheck;
@@ -173,8 +174,13 @@ end
                  break
              end
          end
+        
+        %record run starting time
+        tt0 = GetSecs;
 
-         t0 = GetSecs;
+         WaitSecs(5);
+
+        
 
      end
 
@@ -425,6 +431,7 @@ end
          Screen('TextSize', wPtr, 40);
          DrawFormattedText(wPtr,['THE RUN IS OVER. PLEASE WAIT. '], ...
              'center','center');
+         Screen('Flip', wPtr);
 
          WaitSecs(5);
 
