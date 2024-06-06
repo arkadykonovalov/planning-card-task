@@ -10,6 +10,7 @@ data = array2table(rpsID.*ones(Ntrials*Nrounds,1),'VariableNames',{'id'});
 data.uniqueID = round(rand*100000000)*ones(size(data,1),1);
 data.trial = [1:size(data,1)]';
 data.block = -999*ones(size(data,1),1);
+data.run = -999*ones(size(data,1),1);
 data.btrial = -999*ones(size(data,1),1);
 data.choice = -999*ones(size(data,1),1);
 data.option1 = -999*ones(size(data,1),1);
