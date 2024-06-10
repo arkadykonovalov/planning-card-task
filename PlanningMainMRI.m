@@ -160,7 +160,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
+trial = 1;
 
  for game = 1:Nrounds
 
@@ -182,7 +182,15 @@ end
          end
         
         %record run starting time
-        tt0 = GetSecs;
+        t0 = GetSecs;
+
+         Screen('FillRect', wPtr, black);
+
+         Screen('TextColor', wPtr, white);
+         Screen('TextSize', wPtr, 40);
+         DrawFormattedText(wPtr,['GET READY.'], ...
+             'center','center');
+         Screen('Flip', wPtr);
 
          WaitSecs(5);
 
@@ -200,7 +208,6 @@ end
      handNames = [];
 
      deck = initialDeck;
-     trial = 1;
 
 
      for strial = 1:Ntrials
@@ -470,8 +477,7 @@ bestCombo = max(totalCombosSuits,totalCombosDigits);
 totalBonus = bestCombo*totalBonusRate;
 
 payment = round(sum(data.payoff)/convertionRate);
-DrawFormattedText(wPtr,['This is the end of the experiment.' '\n\n' ...
-    'Please tell the experimenter that you have finished.' '\n\n' ...
+DrawFormattedText(wPtr,['This is the end of the experiment. Please wait...' '\n\n' ...
        ], ...
        'center','center');
 
