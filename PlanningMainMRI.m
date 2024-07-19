@@ -1,7 +1,7 @@
 
-% SCRIPT TO RUN PLANNING EXPERIMENT
+% SCRIPT TO RUN PLANNING EXPERIMENT MRI
 % by Arkady Konovalov (arkady.konovalov@gmail.com)
-% Version May 16 2023
+% Version July 2024
 
 % Clear the workspace and the screen
 sca;
@@ -33,10 +33,10 @@ eyeTracking = false; % set to true if want eye-tracking
 
 % payment parameters
 convertionRate = 500; % in points
-showupFee = 7; % in pounds
+showupFee = 30; % in pounds
 
-suitsBonus = 40;
-digitsBonus = 40;
+suitsBonus = 20;
+digitsBonus = 20;
 
 totalBonusRate = 20;
 
@@ -85,8 +85,12 @@ black = BlackIndex(screenNumber);
 
 % Set up the keyboard
 KbName('UnifyKeyNames');
-leftKey = KbName('LeftArrow');
-rightKey = KbName('RightArrow');
+% leftKey = KbName('LeftArrow');
+% rightKey = KbName('RightArrow');
+
+leftKey = KbName('7&');
+rightKey = KbName('8*');
+
 timingKey = KbName('t');
 escapeKey = KbName('ESCAPE');
 
@@ -476,8 +480,12 @@ totalPoints = sum(data.blocktotalpoints(data.btrial == 1));
 bestCombo = max(totalCombosSuits,totalCombosDigits);
 totalBonus = bestCombo*totalBonusRate;
 
-payment = round(sum(data.payoff)/convertionRate);
+totalScore = totalPoints + totalBonus;
+payment = round(totalScore/convertionRate);
+
 DrawFormattedText(wPtr,['This is the end of the experiment. Please wait...' '\n\n' ...
+      'Your total score is ' num2str(totalScore) '.' '\n\n' ...
+      'Your total score is ' num2str(payment) '.' '\n\n' ...
        ], ...
        'center','center');
 
@@ -485,7 +493,6 @@ data.totalPoints = totalPoints*ones(size(data,1),1);
 data.bestCombo = bestCombo*ones(size(data,1),1);
 data.totalBonus = totalBonus*ones(size(data,1),1);
 data.totalScore = totalBonus*ones(size(data,1),1) + totalPoints*ones(size(data,1),1);
-
 
 save(['data/mat/data_' int2str(sessID) '.mat']);
 writetable(data,['data/csv/data_' int2str(sessID) '.csv']);
